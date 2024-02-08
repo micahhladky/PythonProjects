@@ -1,73 +1,92 @@
 import random
 import json
 
-#Create Pokedex
-with open(r"C:\Users\micah\OneDrive\Documents\GitHub\PythonProjects\PokemonBattler\Pokemon.json") as f:
-    Pokedex = json.load(f)
+#Initialize Pokedex
+with open(r"C:\Users\micah\OneDrive\Documents\GitHub\PythonProjects\PokemonBattler\Pokedex.json") as Pokedex_json:
+    Pokedex = json.load(Pokedex_json)
+#print(Pokedex)
 
-#Pokemon Types    
-Types = ['Water', 'Fire', 'Grass', 'Electric', 'Flying', 'Ground']    
+#Initialize Type Chart
+with open(r"C:\Users\micah\OneDrive\Documents\GitHub\PythonProjects\PokemonBattler\Type_Chart.json") as Type_Chart_json:
+    Type_Chart = json.load(Type_Chart_json)
+#print(Type_Chart)
 
-#Available Pokemon
-Pokemon = ['Bulbasaur', 'Squirtle', 'Charmander', 'Pikachu', 'Pidgey', 'Cubone']
+def main():
+    #Ask the player who their pokemon is
+    Player_Pokemon_Name = input('Who is your Pokemon?\n')
+    #Ensure Player_Pokemon_Name is valid
+    while Player_Pokemon_Name not in Pokedex:
+        print('Error! Invalid pokemon. Choose from ', list(Pokedex.keys()), ". ")
+        Player_Pokemon_Name = input('Who is your Pokemon?\n')
+
+    print(Player_Pokemon_Name, ', I choose you!')
+
+    #Random Pokemon for Computer opponent
+    Computer_Pokemon_Name = random.choice(list(Pokedex.keys()))
+    print("Battle: ", Player_Pokemon_Name, "vs. ", Computer_Pokemon_Name, "!")
+    
+    Player_Pokemon_Stats = Pokedex[Player_Pokemon_Name]
+    Computer_Pokemon_Stats = Pokedex[Computer_Pokemon_Name]
+    
+    #Player_Pokemon_HP = Pokedex[Player_Pokemon_Name]["hp"]
+    #Computer_Pokemon_HP = Pokedex[Computer_Pokemon_Name]["hp"]
+    
+    while Player_Pokemon_Stats["hp"] > 0 and Computer_Pokemon_Stats["hp"] > 0:
+        Computer_Pokemon_Stats["hp"] = Attack_turn(Player_Pokemon_Stats, Computer_Pokemon_Stats)        
+        if Computer_Pokemon_Stats["hp"] > 0:
+            Player_Pokemon_Stats["hp"] = Attack_turn(Computer_Pokemon_Stats, Player_Pokemon_Stats)
+        else:
+            pass
+        
+    if Player_Pokemon_Stats["hp"] <= 0:
+        print("You lose!") 
+    elif Computer_Pokemon_Stats["hp"] <= 0:
+        print("You win!")
+    else:
+        print("IDK who won, I'm just glad we all had fun.")
+
+#Individual Attack Turn Mapping
+def Attack_turn(Attacking_Pokemon, Defending_Pokemon):
+    Attack_Type = Attacking_Pokemon["type"]
+    Defense_Type = Defending_Pokemon["type"]
+    Attack_Value = Attacking_Pokemon["attack"]
+    Defense_HP = Defending_Pokemon["hp"]
+    Damage_Multiplier = Type_Chart[Attack_Type][Defense_Type]
+    Damage_Dealt = int(Attack_Value * Damage_Multiplier)
+    
+    print(Attacking_Pokemon["name"], " hits ", Defending_Pokemon["name"], " for ", Damage_Dealt, " damage!")
+    
+    if Damage_Multiplier == 1.0:
+        print("It's effective!")
+    elif Damage_Multiplier == 2.0:
+        print("It's super-effective!")
+    elif Damage_Multiplier == 0.5:
+        print("It's not very effective...")
+    elif Damage_Multiplier == 0.0:
+        print("It doesn't affect enemy ", Defending_Pokemon["name"], "...")
+    
+    Before_HP = Defense_HP
+    After_HP = Before_HP - Damage_Dealt
+    Show_HP_Change = str(Before_HP) + " --> " + str(After_HP)
+    print(Show_HP_Change)
+    return After_HP
 
 #Pokemon Attacks and their effectiveness against other types
-Water_Attacks = {'Water': 0.5, 'Fire': 2.0, 'Grass': 0.5, 'Electric': 1.0, 'Flying': 1.0, 'Ground': 2.0}
-Fire_Attacks = {'Water': 0.5, 'Fire': 0.5, 'Grass': 2.0, 'Electric': 1.0, 'Flying': 1.0, 'Ground': 1.0}
-Grass_Attacks = {'Water': 2.0, 'Fire': 0.5, 'Grass': 0.5, 'Electric': 1.0, 'Flying': 0.5, 'Ground': 2.0}
-Electric_Attacks = {'Water': 2.0, 'Fire': 1.0, 'Grass': 0.5, 'Electric': 0.5, 'Flying': 2.0, 'Ground': 0.0}
-Flying_Attacks = {'Water': 1.0, 'Fire': 1.0, 'Grass': 2.0, 'Electric': 0.5, 'Flying': 1.0, 'Ground': 1.0}
-Ground_Attacks = {'Water': 1.0, 'Fire': 2.0, 'Grass': 0.5, 'Electric': 2.0, 'Flying': 0.0, 'Ground': 1.0} 
-
-#Pokemon and their Types
-PokemonByType = {'Bulbasaur': 'Grass', 'Squirtle': 'Water', 'Charmander': 'Fire', 'Pikachu': 'Electric', 'Pidgey': 'Flying', 'Cubone': 'Ground'}
-
-#Ask the player who their pokemon is
-PlayerPokemon = input('Who is your Pokemon?\n')
-
-#Ensure PlayerPokemon is valid
-while PlayerPokemon not in Pokemon:
-    print('Error! Invalid pokemon. Choose from ', Pokemon, ". ")
-    PlayerPokemon = input('Who is your Pokemon?\n')
-
-print(PlayerPokemon, ', I choose you!')
-
-#Random Pokemon for Computer opponent
-ComputerPokemon = random.choice(Pokemon)
-
-print("Battle: ", PlayerPokemon, "vs. ", ComputerPokemon, "!")
-
-def Battle(Pokemon_A, Pokemon_B):
-    if Pokemon_A[2] == "Water":
-        Pokemon_A_Attack = Water_Attacks
-    elif Pokemon_A[1] == "Fire":
-        Pokemon_A_Attack = Fire_Attacks
-    elif Pokemon_A[1] == "Grass":
-        Pokemon_A_Attack = Grass_Attacks
-        Pokemon_A_Attack = Electric_Attacks
-    elif Pokemon_A[1] == "Flying":
-        Pokemon_A_Attack = Flying_Attacks
-    elif Pokemon_A[1] == "Ground":
-        Pokemon_A_Attack = Ground_Attacks
+def Damage_Multiplier(attack_type, defense_type):
+    if attack_type == 'Water':
+        damage_multiplier = Type_Chart["Water"[defense_type]]
+    elif attack_type == 'Fire':
+        damage_multiplier = Type_Chart["Fire"[defense_type]]
+    elif attack_type == 'Grass':
+        damage_multiplier = Type_Chart["Grass"[defense_type]]
+    elif attack_type == 'Electric':
+        damage_multiplier = Type_Chart["Electric"[defense_type]]
+    elif attack_type == 'Flying':
+        damage_multiplier = Type_Chart["Flying"[defense_type]]
+    elif attack_type == 'Ground':
+        damage_multiplier = Type_Chart["Ground"[defense_type]]
     else:
-        print("Type Error")
-        
-    if Pokemon_B[1] == "Water":
-        Pokemon_B_Attack = Water_Attacks
-    elif Pokemon_B[1] == "Fire":
-        Pokemon_B_Attack = Fire_Attacks
-    elif Pokemon_B[1] == "Grass":
-        Pokemon_B_Attack = Grass_Attacks
-    elif Pokemon_B[1] == "Electric":
-        Pokemon_B_Attack = Electric_Attacks
-    elif Pokemon_B[1] == "Flying":
-        Pokemon_B_Attack = Flying_Attacks
-    elif Pokemon_B[1] == "Ground":
-        Pokemon_B_Attack = Ground_Attacks
-    else:
-        print("Type Error")
-    
-    print(Pokemon_A_Attack, Pokemon_B_Attack)
-    
-print(Battle(PlayerPokemon, ComputerPokemon))
-#main()
+        print('Attack_Types function - type error')
+    return damage_multiplier
+
+main()
