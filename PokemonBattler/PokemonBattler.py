@@ -1,7 +1,12 @@
 import random
 import json
 
-json.load(Pokemon)
+f = open(r"C:\Users\micah\OneDrive\Documents\GitHub\PythonProjects\PokemonBattler\Pokemon.json")
+Pokedex = json.load(f)
+print(Pokedex)
+print(Pokedex[0])
+
+
 #Pokemon Types    
 Types = ['Water', 'Fire', 'Grass', 'Electric', 'Flying', 'Ground']    
 
@@ -32,10 +37,39 @@ print(PlayerPokemon, ', I choose you!')
 #Random Pokemon for Computer opponent
 ComputerPokemon = random.choice(Pokemon)
 
-
 print("Battle: ", PlayerPokemon, "vs. ", ComputerPokemon, "!")
 
 def Battle(Pokemon_A, Pokemon_B):
-    pass    
-
+    if Pokemon_A[2] == "Water":
+        Pokemon_A_Attack = Water_Attacks
+    elif Pokemon_A[1] == "Fire":
+        Pokemon_A_Attack = Fire_Attacks
+    elif Pokemon_A[1] == "Grass":
+        Pokemon_A_Attack = Grass_Attacks
+        Pokemon_A_Attack = Electric_Attacks
+    elif Pokemon_A[1] == "Flying":
+        Pokemon_A_Attack = Flying_Attacks
+    elif Pokemon_A[1] == "Ground":
+        Pokemon_A_Attack = Ground_Attacks
+    else:
+        print("Type Error")
+        
+    if Pokemon_B[1] == "Water":
+        Pokemon_B_Attack = Water_Attacks
+    elif Pokemon_B[1] == "Fire":
+        Pokemon_B_Attack = Fire_Attacks
+    elif Pokemon_B[1] == "Grass":
+        Pokemon_B_Attack = Grass_Attacks
+    elif Pokemon_B[1] == "Electric":
+        Pokemon_B_Attack = Electric_Attacks
+    elif Pokemon_B[1] == "Flying":
+        Pokemon_B_Attack = Flying_Attacks
+    elif Pokemon_B[1] == "Ground":
+        Pokemon_B_Attack = Ground_Attacks
+    else:
+        print("Type Error")
+    
+    print(Pokemon_A_Attack, Pokemon_B_Attack)
+    
+print(Battle(PlayerPokemon, ComputerPokemon))
 #main()

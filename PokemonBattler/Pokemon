@@ -1,34 +1,40 @@
 [
-        {
+{
+    "Bulbasaur": {
             "name": "Bulbasaur",
             "type": "Grass",
             "hp": 26,
             "attack": 4
         },
-        {
+    "Squirtle": {
             "name": "Squirtle",
             "type": "Water",
             "hp": 21,
             "attack": 4.3
-        },{
+        },
+    "Charmander": {
             "name": "Charmander",
             "type": "Fire",
             "hp": 18,
             "attack": 5
-        },{
+        },
+    "Pikachu": {
             "name": "Pikachu",
             "type": "Grass",
             "hp": 16,
             "attack": 6.2
-        },{
+        },
+    "Pidgey": {
             "name": "Pidgey",
             "type": "Flying",
             "hp": 25,
             "attack": 4.3
-        },{
+        },
+    "Cubone": {
             "name": "Cubone",
             "type": "Ground",
             "hp": 22,
             "attack": 4.6
         }
+}
 ]
