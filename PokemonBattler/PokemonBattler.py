@@ -1,11 +1,9 @@
 import random
 import json
 
-f = open(r"C:\Users\micah\OneDrive\Documents\GitHub\PythonProjects\PokemonBattler\Pokemon.json")
-Pokedex = json.load(f)
-print(Pokedex)
-print(Pokedex[0])
-
+#Create Pokedex
+with open(r"C:\Users\micah\OneDrive\Documents\GitHub\PythonProjects\PokemonBattler\Pokemon.json") as f:
+    Pokedex = json.load(f)
 
 #Pokemon Types    
 Types = ['Water', 'Fire', 'Grass', 'Electric', 'Flying', 'Ground']    
