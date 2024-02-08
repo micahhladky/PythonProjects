@@ -71,22 +71,4 @@ def Attack_turn(Attacking_Pokemon, Defending_Pokemon):
     print(Show_HP_Change)
     return After_HP
 
-#Pokemon Attacks and their effectiveness against other types
-def Damage_Multiplier(attack_type, defense_type):
-    if attack_type == 'Water':
-        damage_multiplier = Type_Chart["Water"[defense_type]]
-    elif attack_type == 'Fire':
-        damage_multiplier = Type_Chart["Fire"[defense_type]]
-    elif attack_type == 'Grass':
-        damage_multiplier = Type_Chart["Grass"[defense_type]]
-    elif attack_type == 'Electric':
-        damage_multiplier = Type_Chart["Electric"[defense_type]]
-    elif attack_type == 'Flying':
-        damage_multiplier = Type_Chart["Flying"[defense_type]]
-    elif attack_type == 'Ground':
-        damage_multiplier = Type_Chart["Ground"[defense_type]]
-    else:
-        print('Attack_Types function - type error')
-    return damage_multiplier
-
 main()
